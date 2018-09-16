@@ -1,0 +1,22 @@
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t test_image -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run test_image npm run test -- --coverage
+
+after_success:
+  - docker build -t ryomazda/fibonacci-client ./client
+  - docker build -t ryomazda/fibonacci-server ./server
+  - docker build -t ryomazda/fibonacci-worker ./worker
+  - docker build -t ryomazda/fibonacci-nginx ./nginx
+  # Login to the docker CLI
+  - echo "$DOCKERHUB_PASSWD" | docker login -u "$DOCKERHUB_ID" --password-stdin
+  # push images
+  - docker push ryomazda/fibonacci-client
+  - docker push ryomazda/fibonacci-server
+  - docker push ryomazda/fibonacci-worker
+  - docker push ryomazda/fibonacci-nginx
