@@ -1,1 +1,3 @@
 # fibonacci
+
+## System architecture
