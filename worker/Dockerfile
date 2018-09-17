@@ -1,4 +1,4 @@
-FROM node:10.8.0-alpine
+FROM node:alpine
 WORKDIR /app
 COPY ./package.json ./
 RUN npm install
